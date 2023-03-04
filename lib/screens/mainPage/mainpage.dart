@@ -9,7 +9,7 @@ import 'package:karaz_user/globalvariable.dart';
 import 'package:karaz_user/screens/mainPage/main_page_controller.dart';
 import 'package:karaz_user/widgets/MainMenuWidget/MenuButton.dart';
 import 'package:karaz_user/widgets/MainMenuWidget/RequestSheet.dart';
-import 'package:karaz_user/widgets/MainMenuWidget/RideDetailsSheet.dart';
+import 'package:karaz_user/widgets/MainMenuWidget/ride_details_sheet.dart';
 import 'package:karaz_user/widgets/MainMenuWidget/SearchSheet.dart';
 import 'package:karaz_user/widgets/MainMenuWidget/TripSheet.dart';
 import 'package:karaz_user/widgets/TheDrawer.dart';
@@ -29,89 +29,89 @@ class MainPage extends GetView<MainPageController> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: Container(
-        width: 250,
-        color: Colors.white,
-        child: TheDrawer(controller: controller),
-      ),
-      body: Obx(
-        () => Stack(
-          children: <Widget>[
-            Container(
-              padding:
-                  EdgeInsets.only(bottom: controller.mapBottomPadding.value),
-              child: Stack(
-                children: [
-                  GoogleMap(
-                    onCameraMove: ((CameraPosition position) {
-                      print(position.target);
-                      // controller.lastMapPosition!.value = position.target;
-                      // print(controller.lastMapPosition!.value);
-                    }),
-                    mapType: MapType.normal,
-                    myLocationButtonEnabled: true,
-                    initialCameraPosition: googlePlex,
-                    myLocationEnabled: true,
-                    zoomGesturesEnabled: true,
-                    zoomControlsEnabled: true,
-                    polylines: controller.polylines.value,
-                    markers: controller.markers.value,
-                    circles: controller.circles,
-                    onMapCreated: (GoogleMapController? googleMapController) {
-                      controller.googleMapController
-                          .complete(googleMapController);
-                      controller.mapController!.value = googleMapController!;
-                      controller.mapBottomPadding.value =
-                          (Platform.isAndroid) ? 280 : 270;
-                    },
-                  ),
-                  (controller.locationOnMap.value)
-                      ? Center(
-                          child: Icon(
-                            Icons.location_pin,
-                            color: AppColors.primary,
-                            size: 30,
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
-            ),
-
-            ///MenuButtonDraewr
-            Positioned(
-              top: 44,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  if (controller.drawerCanOpen.value &&
-                      controller.locationOnMap.value == false) {
-                    scaffoldKey.currentState!.openDrawer();
-                  } else {
-                    controller.resetApp();
-                  }
-                },
-                child: MenuButton(),
-              ),
-            ),
-
-            /// SearchSheet
-            Positioned(left: 0, right: 0, bottom: 0, child: SearchSheet()),
-
-            /// RideDetailsSheet
-            Positioned(left: 0, right: 0, bottom: 0, child: RideDetailsSheet()),
-
-            /// RequestSheet
-            Positioned(left: 0, right: 0, bottom: 0, child: RequestSheet()),
-
-            /// TripSheet
-            Positioned(left: 0, right: 0, bottom: 0, child: TripSheet()),
-          ],
+  Widget build(BuildContext context) => Scaffold(
+        key: scaffoldKey,
+        drawer: Container(
+          width: 250,
+          color: Colors.white,
+          child: TheDrawer(controller: controller),
         ),
-      ),
-    );
-  }
+        body: Obx(
+          () => Stack(
+            children: <Widget>[
+              Container(
+                padding:
+                    EdgeInsets.only(bottom: controller.mapBottomPadding.value),
+                child: Stack(
+                  children: <Widget>[
+                    GoogleMap(
+                      onCameraMove: ((CameraPosition position) {}),
+                      mapType: MapType.normal,
+                      myLocationButtonEnabled: true,
+                      initialCameraPosition: googlePlex,
+                      myLocationEnabled: true,
+                      zoomGesturesEnabled: true,
+                      zoomControlsEnabled: true,
+                      polylines: controller.polylines.value,
+                      markers: controller.markers.value,
+                      circles: controller.circles,
+                      onMapCreated: (GoogleMapController? googleMapController) {
+                        controller.googleMapController
+                            .complete(googleMapController);
+                        controller.mapController!.value = googleMapController!;
+                        controller.mapBottomPadding.value =
+                            (Platform.isAndroid) ? 280 : 270;
+                      },
+                    ),
+                    if (controller.locationOnMap.value)
+                      Center(
+                        child: Icon(
+                          Icons.location_pin,
+                          color: AppColors.primary,
+                          size: 30,
+                        ),
+                      )
+                    else
+                      Container()
+                  ],
+                ),
+              ),
+
+              ///MenuButtonDraewr
+              Positioned(
+                top: 44,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    if (controller.drawerCanOpen.value &&
+                        controller.locationOnMap.value == false) {
+                      scaffoldKey.currentState!.openDrawer();
+                    } else {
+                      controller.resetApp();
+                    }
+                  },
+                  child: MenuButton(),
+                ),
+              ),
+
+              /// SearchSheet
+              Positioned(left: 0, right: 0, bottom: 0, child: SearchSheet()),
+
+              /// RideDetailsSheet
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: RideDetailsSheet(),
+              ),
+
+              /// RequestSheet
+              Positioned(left: 0, right: 0, bottom: 0, child: RequestSheet()),
+
+              /// TripSheet
+              Positioned(left: 0, right: 0, bottom: 0, child: TripSheet()),
+            ],
+          ),
+        ),
+      );
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls, always_specify_types, duplicate_ignore, avoid_classes_with_only_static_members
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' hide log;
@@ -25,7 +27,7 @@ class HelperMethods {
     String userid = currentFirebaseUser!.uid;
     DatabaseReference userRef =
         FirebaseDatabase.instance.ref().child('users/$userid');
-    userRef.once().then((snapshot) {
+    await userRef.once().then((DatabaseEvent snapshot) {
       if (snapshot.snapshot.value != null) {
         dynamic data = snapshot.snapshot.value;
         currentUserInfo = UserData(
@@ -41,10 +43,13 @@ class HelperMethods {
   }
 
   static Future<String> findCordinateAddress(
-      LatLng position, context, String locationType) async {
+    LatLng position,
+    context,
+    String locationType,
+  ) async {
     MainPageController mainPageController = Get.find();
     String? placeAddress;
-    var connectivityResult = await Connectivity().checkConnectivity();
+    dynamic connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult != ConnectivityResult.mobile &&
         connectivityResult != ConnectivityResult.wifi) {
       return placeAddress!;
@@ -53,7 +58,7 @@ class HelperMethods {
     String url1 =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey';
 
-    var response = await httpClient.get(url1);
+    dynamic response = await httpClient.get(url1);
     if (response.statusCode == 200) {
       placeAddress = response.data['results'][0]['formatted_address'];
       if (locationType == 'pickUp') {
@@ -79,9 +84,12 @@ class HelperMethods {
   }
 
   static Future getDirectionDetails(
-      LatLng startPosition, LatLng endPosition) async {
-    var response = await httpClient.get(
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$mapKey');
+    LatLng startPosition,
+    LatLng endPosition,
+  ) async {
+    dynamic response = await httpClient.get(
+      'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$mapKey',
+    );
 
     if (response.statusCode != 200) {
       return null;
@@ -91,6 +99,7 @@ class HelperMethods {
     directionDetails.durationText =
         response.data['routes'][0]['legs'][0]['duration']['text'];
     directionDetails.durationValue =
+        // ignore: avoid_dynamic_calls
         response.data['routes'][0]['legs'][0]['duration']['value'];
     directionDetails.distanceText =
         response.data['routes'][0]['legs'][0]['distance']['text'];
@@ -113,15 +122,14 @@ class HelperMethods {
   }
 
   static double generateRandomNumber(int max) {
-    var randomGenerator = Random();
+    Random randomGenerator = Random();
     int randInt = randomGenerator.nextInt(max);
 
     return randInt.toDouble();
   }
 
   static sendNotification({String? token, context, String? rideId}) async {
-    print(rideId!);
-    var destination =
+    Address? destination =
         Provider.of<AppData>(context, listen: false).pickupAddress;
     Map<String, String> headerMap = {
       'Content-Type': 'application/json',
@@ -147,10 +155,11 @@ class HelperMethods {
       'to': token
     };
     try {
-      var response = await http.post(
-          Uri.parse('https://fcm.googleapis.com/fcm/send'),
-          headers: headerMap,
-          body: jsonEncode(bodyMap));
+      http.Response response = await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: headerMap,
+        body: jsonEncode(bodyMap),
+      );
       log(response.statusCode.toString());
     } on DioError catch (e) {
       Get.log('Status Code ${e.response!.statusCode} message ${e.response}');

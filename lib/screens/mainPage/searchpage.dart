@@ -10,10 +10,9 @@ import 'package:karaz_user/widgets/BrandDivier.dart';
 import 'package:karaz_user/widgets/PredictionTile.dart';
 
 class SearchPage extends GetView<MainPageController> {
-  final focusDestination = FocusNode();
-  static final Dio httpClient = Dio();
-
   SearchPage({Key? key}) : super(key: key);
+  final FocusNode focusDestination = FocusNode();
+  static final Dio httpClient = Dio();
 
   void setFocus() {
     if (!controller.focused.value) {
@@ -25,17 +24,18 @@ class SearchPage extends GetView<MainPageController> {
   void searchPlace(String placeName) async {
     Prediction prediction;
     if (placeName.length > 1) {
-      var response = await httpClient.get(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=123254251&components=country:jo');
+      dynamic response = await httpClient.get(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=123254251&components=country:jo',
+      );
 
       if (response.statusCode != 200) {
         log(response.statusCode.toString());
         return;
       }
       if (response.statusCode == 200) {
-        var items = response.data['predictions'];
+        dynamic items = response.data['predictions'];
         //log(items[0]['structured_formatting']['main_text'].toString());
-        for (var key in items) {
+        for (final dynamic key in items) {
           String mainText = key['structured_formatting']['main_text'];
           String secondaryText = key['structured_formatting']['secondary_text'];
           String placeId = key['place_id'];
@@ -60,20 +60,27 @@ class SearchPage extends GetView<MainPageController> {
           children: <Widget>[
             Container(
               height: 210,
-              decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 5.0,
-                  spreadRadius: 0.5,
-                  offset: Offset(
-                    0.7,
-                    0.7,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5.0,
+                    spreadRadius: 0.5,
+                    offset: Offset(
+                      0.7,
+                      0.7,
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 24, top: 48, right: 24, bottom: 20),
+                  left: 24,
+                  top: 48,
+                  right: 24,
+                  bottom: 20,
+                ),
                 child: Column(
                   children: <Widget>[
                     const SizedBox(
@@ -82,10 +89,11 @@ class SearchPage extends GetView<MainPageController> {
                     Stack(
                       children: <Widget>[
                         GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: const Icon(Icons.arrow_back)),
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: const Icon(Icons.arrow_back),
+                        ),
                         Center(
                           child: Text(
                             'Set Destination'.tr,
@@ -120,18 +128,23 @@ class SearchPage extends GetView<MainPageController> {
                                 style: Get.textTheme.headline6,
                                 controller: controller.pickupController,
                                 decoration: InputDecoration(
-                                    hintText: controller.mainPickupAddress.value
-                                                .placeName ==
-                                            null
-                                        ? ''
-                                        : controller
-                                            .mainPickupAddress.value.placeName!,
-                                    fillColor: BrandColors.colorLightGrayFair,
-                                    filled: true,
-                                    border: InputBorder.none,
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 10, top: 8, bottom: 8, right: 8)),
+                                  hintText: controller.mainPickupAddress.value
+                                              .placeName ==
+                                          null
+                                      ? ''
+                                      : controller
+                                          .mainPickupAddress.value.placeName!,
+                                  fillColor: BrandColors.colorLightGrayFair,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.only(
+                                    left: 10,
+                                    top: 8,
+                                    bottom: 8,
+                                    right: 8,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -160,20 +173,25 @@ class SearchPage extends GetView<MainPageController> {
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: TextField(
-                                onChanged: (value) {
+                                onChanged: (String value) {
                                   searchPlace(value);
                                 },
                                 focusNode: focusDestination,
                                 controller: controller.destinationController,
                                 style: Get.textTheme.headline6,
                                 decoration: InputDecoration(
-                                    hintText: 'Where you to go?'.tr,
-                                    fillColor: BrandColors.colorLightGrayFair,
-                                    filled: true,
-                                    border: InputBorder.none,
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.only(
-                                        left: 10, top: 8, bottom: 8, right: 8)),
+                                  hintText: 'Where you to go?'.tr,
+                                  fillColor: BrandColors.colorLightGrayFair,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.only(
+                                    left: 10,
+                                    top: 8,
+                                    bottom: 8,
+                                    right: 8,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -184,28 +202,27 @@ class SearchPage extends GetView<MainPageController> {
                 ),
               ),
             ),
-            (controller.destinationPredictionList.isNotEmpty)
-                ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Obx(
-                      () => ListView.separated(
-                        padding: const EdgeInsets.all(0),
-                        itemBuilder: (context, index) {
-                          return PredictionTile(
-                            prediction:
-                                controller.destinationPredictionList[index],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            BrandDivider(),
-                        itemCount: controller.destinationPredictionList.length,
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                      ),
+            if (controller.destinationPredictionList.isNotEmpty)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Obx(
+                  () => ListView.separated(
+                    padding: const EdgeInsets.all(0),
+                    itemBuilder: (BuildContext context, int index) =>
+                        PredictionTile(
+                      prediction: controller.destinationPredictionList[index],
                     ),
-                  )
-                : Container(),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        BrandDivider(),
+                    itemCount: controller.destinationPredictionList.length,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                  ),
+                ),
+              )
+            else
+              Container(),
           ],
         ),
       ),

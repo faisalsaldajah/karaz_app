@@ -20,7 +20,7 @@ UserData? currentUserInfo;
 RxBool homeAddresscheck = false.obs;
 
 String driverCarStyle = '';
-var geoLocator = Geolocator();
+Geolocator geoLocator = Geolocator();
 
 RxString homeAddress = ''.obs;
 NearbyDriver? nearbyDriver;

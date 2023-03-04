@@ -1,4 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,10 +20,7 @@ import 'package:karaz_user/screens/mainPage/mainpage.dart';
 import 'package:karaz_user/screens/splash/splash_binding.dart';
 import 'package:karaz_user/screens/splash/splash_view.dart';
 
-Future<void> backgroundHandler(RemoteMessage message) async {
-  print(message.data.toString());
-  print(message.notification!.title);
-}
+Future<void> backgroundHandler(RemoteMessage message) async {}
 
 final GetStorage globalStorage = GetStorage();
 bool? firstTime;
@@ -39,8 +35,7 @@ Future<void> main() async {
   await GetStorage.init();
   currentFirebaseUser = FirebaseAuth.instance.currentUser;
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print(fcmToken);
+  //final String? fcmToken = await FirebaseMessaging.instance.getToken();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   await messaging.requestPermission(
@@ -53,18 +48,19 @@ Future<void> main() async {
     sound: true,
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     firstTime = globalStorage.read('firstTimeOpen');
-    print(firstTime);
-    return ChangeNotifierProvider(
-      create: (context) => AppData(),
+    return ChangeNotifierProvider<AppData>(
+      create: (BuildContext context) => AppData(),
       child: GetMaterialApp(
-        localizationsDelegates: const [
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
@@ -76,10 +72,10 @@ class MyApp extends StatelessWidget {
         theme: Get.find<SettingsService>().getLightTheme(),
         getPages: AppPages.routes,
         home: firstTime == null ? OnBoardView() : const SplashView(),
-        routes: {
-          SignUpView.id: (context) => SignUpView(),
-          LoginPage.id: (context) => const LoginPage(),
-          MainPage.id: (context) => MainPage(),
+        routes: <String, Widget Function(BuildContext)>{
+          SignUpView.id: (BuildContext context) => SignUpView(),
+          LoginPage.id: (BuildContext context) => const LoginPage(),
+          MainPage.id: (BuildContext context) => MainPage(),
         },
       ),
     );

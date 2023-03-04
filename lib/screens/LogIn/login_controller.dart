@@ -18,7 +18,7 @@ class LogInController extends GetxController {
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
   RxBool showPassword = true.obs;
 
-  Future login() async {
+  Future<void> login() async {
     authManager.commonTools.showLoading();
     try {
       final UserCredential user =
@@ -30,7 +30,7 @@ class LogInController extends GetxController {
       if (user.user != null) {
         DatabaseReference userRef =
             FirebaseDatabase.instance.ref().child('users/${user.user!.uid}');
-        userRef.once().then((snapshot) {
+        await userRef.once().then((DatabaseEvent snapshot) {
           if (snapshot.snapshot.value != null) {
             HelperMethods.getCurrentUserInfo();
             Get.offAll(() => const SplashView(), binding: SplashBinding());
@@ -46,7 +46,8 @@ class LogInController extends GetxController {
   @override
   void onInit() async {
     try {
-      final result = await InternetAddress.lookup('google.com');
+      final List<InternetAddress> result =
+          await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {}
     } on SocketException catch (_) {
       authManager.commonTools.showFailedSnackBar('No internet connectivity');

@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 
 class RequestHelper {
-  static Future getHttp(String url) async {
+  static Future<dynamic> getHttp(String url) async {
     try {
-      var response = await Dio().get(url);
+      Response<dynamic> response = await Dio().get(url);
       if (response.statusCode == 200) {
         dynamic data = response.data;
         dynamic decodedData = jsonDecode(data);
@@ -15,7 +17,6 @@ class RequestHelper {
         return 'failed';
       }
     } catch (e) {
-      print(e);
       return 'failed';
     }
   }

@@ -1,43 +1,4 @@
 class Driver {
-  Amount? amount;
-  bool? approveDriver;
-  String? carColor;
-  String? carFactory;
-  String? carNumber;
-  String? carType;
-  String? driverCarBackImageUrl;
-  String? driverCarFrontImageUrl;
-  String? driverCarLicenseImageUrl;
-  String? driverLicenseImageUrl;
-  bool? driversIsAvailable;
-  String? personalImageUrl;
-  String? socialAgentNumber;
-  String? token;
-  String? fullname;
-  String? email;
-  String? phone;
-  String? id;
-
-  Driver(
-      {this.amount,
-      this.approveDriver,
-      this.carColor,
-      this.carFactory,
-      this.carNumber,
-      this.carType,
-      this.driverCarBackImageUrl,
-      this.driverCarFrontImageUrl,
-      this.driverCarLicenseImageUrl,
-      this.driverLicenseImageUrl,
-      this.driversIsAvailable,
-      this.personalImageUrl,
-      this.socialAgentNumber,
-      this.token,
-      this.fullname,
-      this.email,
-      this.phone,
-      this.id});
-
   Driver.fromJson(Map<String, dynamic> json) {
     amount = json['amount'] != null ? Amount.fromJson(json['amount']) : null;
     approveDriver = json['approveDriver'];
@@ -58,6 +19,45 @@ class Driver {
     phone = json['phone'];
     id = json['id'];
   }
+
+  Driver({
+    this.amount,
+    this.approveDriver,
+    this.carColor,
+    this.carFactory,
+    this.carNumber,
+    this.carType,
+    this.driverCarBackImageUrl,
+    this.driverCarFrontImageUrl,
+    this.driverCarLicenseImageUrl,
+    this.driverLicenseImageUrl,
+    this.driversIsAvailable,
+    this.personalImageUrl,
+    this.socialAgentNumber,
+    this.token,
+    this.fullname,
+    this.email,
+    this.phone,
+    this.id,
+  });
+  Amount? amount;
+  bool? approveDriver;
+  String? carColor;
+  String? carFactory;
+  String? carNumber;
+  String? carType;
+  String? driverCarBackImageUrl;
+  String? driverCarFrontImageUrl;
+  String? driverCarLicenseImageUrl;
+  String? driverLicenseImageUrl;
+  bool? driversIsAvailable;
+  String? personalImageUrl;
+  String? socialAgentNumber;
+  String? token;
+  String? fullname;
+  String? email;
+  String? phone;
+  String? id;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -86,19 +86,18 @@ class Driver {
 }
 
 class Amount {
-  String? amount;
-  String? currentAmount;
-  String? status;
-  String? transNumber;
-
-  Amount({this.amount, this.currentAmount, this.status, this.transNumber});
-
   Amount.fromJson(Map<String, dynamic> json) {
     amount = json['amount'];
     currentAmount = json['currentAmount'];
     status = json['status'];
     transNumber = json['transNumber'];
   }
+
+  Amount({this.amount, this.currentAmount, this.status, this.transNumber});
+  String? amount;
+  String? currentAmount;
+  String? status;
+  String? transNumber;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

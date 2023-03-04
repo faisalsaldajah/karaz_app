@@ -1,39 +1,4 @@
 class TripDetails {
-  String? carDetails;
-  String? createdAt;
-  Destination? destination;
-  String? destinationAddress;
-  String? driverId;
-  Destination? driverLocation;
-  String? driverName;
-  String? driverPhone;
-  String? fares;
-  Destination? location;
-  String? paymentMethod;
-  String? pickupAddress;
-  String? riderName;
-  String? riderPhone;
-  String? status;
-  String? riderID;
-
-  TripDetails(
-      {this.carDetails,
-      this.createdAt,
-      this.destination,
-      this.destinationAddress,
-      this.driverId,
-      this.driverLocation,
-      this.driverName,
-      this.driverPhone,
-      this.fares,
-      this.location,
-      this.paymentMethod,
-      this.pickupAddress,
-      this.riderName,
-      this.riderPhone,
-      this.riderID,
-      this.status});
-
   TripDetails.fromJson(Map<String, dynamic> json) {
     carDetails = json['car_details'];
     createdAt = json['created_at'];
@@ -59,6 +24,41 @@ class TripDetails {
     riderID = json['riderID'];
   }
 
+  TripDetails({
+    this.carDetails,
+    this.createdAt,
+    this.destination,
+    this.destinationAddress,
+    this.driverId,
+    this.driverLocation,
+    this.driverName,
+    this.driverPhone,
+    this.fares,
+    this.location,
+    this.paymentMethod,
+    this.pickupAddress,
+    this.riderName,
+    this.riderPhone,
+    this.riderID,
+    this.status,
+  });
+  String? carDetails;
+  String? createdAt;
+  Destination? destination;
+  String? destinationAddress;
+  String? driverId;
+  Destination? driverLocation;
+  String? driverName;
+  String? driverPhone;
+  String? fares;
+  Destination? location;
+  String? paymentMethod;
+  String? pickupAddress;
+  String? riderName;
+  String? riderPhone;
+  String? status;
+  String? riderID;
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['car_details'] = carDetails;
@@ -82,21 +82,20 @@ class TripDetails {
     data['rider_name'] = riderName;
     data['rider_phone'] = riderPhone;
     data['status'] = status;
-    data['riderID'];
+    data['riderID'] = riderID;
     return data;
   }
 }
 
 class Destination {
-  String? latitude;
-  String? longitude;
-
-  Destination({this.latitude, this.longitude});
-
   Destination.fromJson(Map<String, dynamic> json) {
     latitude = json['latitude'];
     longitude = json['longitude'];
   }
+
+  Destination({this.latitude, this.longitude});
+  String? latitude;
+  String? longitude;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

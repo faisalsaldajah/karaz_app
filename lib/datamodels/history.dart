@@ -1,10 +1,4 @@
 class History {
-  int? totalRide;
-  double? totalIncome;
-  HistoryTripDetail? historyTripDetail;
-
-  History({this.totalRide, this.totalIncome, this.historyTripDetail});
-
   History.fromJson(Map<String, dynamic> json) {
     totalRide = json['totalRide'];
     totalIncome = json['totalIncome'];
@@ -12,6 +6,11 @@ class History {
         ? HistoryTripDetail.fromJson(json['historyTripDetail'])
         : null;
   }
+
+  History({this.totalRide, this.totalIncome, this.historyTripDetail});
+  int? totalRide;
+  double? totalIncome;
+  HistoryTripDetail? historyTripDetail;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -25,30 +24,6 @@ class History {
 }
 
 class HistoryTripDetail {
-  Destination? destination;
-  Destination? pickUp;
-  String? riderID;
-  String? driverID;
-  String? destinationAddress;
-  String? pickUpAddress;
-  String? time;
-  double? price;
-  String? riderName;
-  String? status;
-  String? paymentMethod;
-
-  HistoryTripDetail(
-      {this.destination,
-      this.pickUp,
-      this.riderID,
-      this.destinationAddress,
-      this.pickUpAddress,
-      this.time,
-      this.price,
-      this.riderName,
-      this.status,
-      this.paymentMethod});
-
   HistoryTripDetail.fromJson(Map<String, dynamic> json) {
     destination = json['destination'] != null
         ? Destination.fromJson(json['destination'])
@@ -65,6 +40,30 @@ class HistoryTripDetail {
     paymentMethod = json['paymentMethod'];
     driverID = json['driverID'];
   }
+
+  HistoryTripDetail({
+    this.destination,
+    this.pickUp,
+    this.riderID,
+    this.destinationAddress,
+    this.pickUpAddress,
+    this.time,
+    this.price,
+    this.riderName,
+    this.status,
+    this.paymentMethod,
+  });
+  Destination? destination;
+  Destination? pickUp;
+  String? riderID;
+  String? driverID;
+  String? destinationAddress;
+  String? pickUpAddress;
+  String? time;
+  double? price;
+  String? riderName;
+  String? status;
+  String? paymentMethod;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -88,15 +87,14 @@ class HistoryTripDetail {
 }
 
 class Destination {
-  double? lat;
-  double? long;
-
-  Destination({this.lat, this.long});
-
   Destination.fromJson(Map<String, dynamic> json) {
     lat = json['lat'];
     long = json['long'];
   }
+
+  Destination({this.lat, this.long});
+  double? lat;
+  double? long;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
