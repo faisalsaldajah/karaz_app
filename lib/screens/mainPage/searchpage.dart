@@ -27,7 +27,6 @@ class SearchPage extends GetView<MainPageController> {
       dynamic response = await httpClient.get(
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=123254251&components=country:jo',
       );
-
       if (response.statusCode != 200) {
         log(response.statusCode.toString());
         return;
